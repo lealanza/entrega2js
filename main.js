@@ -66,7 +66,7 @@ const  getPizza= ()=>{
     return pizzaListado;
 }
 
-const savePizzaListInLocalStorage = (pizzaList) => {
+const guardarPizzasLocal = (pizzaList) => {
     localStorage.setItem("pizzas", JSON.stringify(pizzaListado));
 }
 
@@ -79,30 +79,30 @@ const createPizzaCard = (pizza, classType) => {
     `;
 }
 
-const  renderPizzaCardsInContainer =(pizzaListado)=>{
+const  renderPizzas =(pizzaListado)=>{
     agregarListado.innerHTML = pizzaListado.map(ListadoDePizzas => createPizzaCard(ListadoDePizzas, ListadoDePizzas.id==undefined)).join("") 
 }
 
 
-const  searchPizza=(e)=>{
+const  buscarPizzas=(e)=>{
     e.preventDefault();
     const id = selectorPizzas.value;
-    if (!id) {pizzaListado = [...pizzaListado, {id: undefined, nombre: "No ha ingresado ningun ID de pizza", precio: ""}]}else{
+    if (!id) {pizzaListado = [...pizzaListado, {id: undefined, nombre: "No ha ingresado ningun ID de pizza", precio: undefined}]}else{
         const nuevaPizza =  Pizzas.find( ListadoDePizzas => ListadoDePizzas.id == id); 
         if (nuevaPizza == undefined){
-            pizzaListado = [...pizzaListado, {id: undefined, nombre: "El numero ingresado no coincide con ningun ID de Pizza.", precio: ""}]
+            pizzaListado = [...pizzaListado, {id: undefined, nombre: "El numero ingresado no coincide con ningun ID de Pizza.", precio: undefined}]
         }else{
             pizzaListado = [...pizzaListado, {id: nuevaPizza.id, nombre: nuevaPizza.nombre, precio : nuevaPizza.precio}];
         }
     }
-    savePizzaListInLocalStorage(pizzaListado);
-    renderPizzaCardsInContainer(pizzaListado);
+    guardarPizzasLocal(pizzaListado);
+    renderPizzas(pizzaListado);
     selectorPizzas.value = ""
 };
 
-const init= () => {
+const iniciar = () => {
     const pizzaList = getPizza();
-    renderPizzaCardsInContainer(pizzaList);
-    formu.addEventListener("submit", searchPizza)
+    renderPizzas(pizzaList);
+    formu.addEventListener("submit", buscarPizzas)
 };
-init();
+iniciar();
